@@ -3,6 +3,7 @@ import OLTPService from '../../service/OLTPService';
 import jwt_decode from 'jwt-decode';
 import SalesTable from './table';
 import _ from 'lodash';
+import { LoadingIndicator } from '../../components/loading-indicator';
 
 const Sales = () => {
   const [loading, setLoading] = useState(true);
@@ -15,7 +16,7 @@ const Sales = () => {
   }, []);
 
   return (
-    <div>{loading ? <div>Loading ... </div> : <SalesTable data={sales} />}</div>
+    <div>{loading ? <LoadingIndicator /> : <SalesTable data={sales} />}</div>
   );
 };
 

@@ -9,6 +9,7 @@ export const setUser = (payload) => {
 export const login = (userData, responseData) => async (dispatch) => {
   try {
     const decoded = jwt_decode(responseData.authToken);
+    console.log(decoded);
     const user = { role: decoded.rol, username: userData.username };
     setUsername(userData.username);
     setAuthToken(responseData.authToken);

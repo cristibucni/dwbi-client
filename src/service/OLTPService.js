@@ -10,6 +10,8 @@ import {
   GET_ITEM_TOTAL_SALES_LAST_YEAR_THIS_YEAR_ON_MENU_API_PATH,
   GET_REPORT_4,
   GET_REPORT_5,
+  CREATE_ORDER_API_PATH,
+  GET_ALL_ORDERS,
 } from './constants';
 
 class OLTP {
@@ -19,6 +21,10 @@ class OLTP {
 
   getOrders = async (customerId) => {
     return await axios.get(GET_ORDER_API_PATH, { params: { customerId } });
+  };
+
+  getAllOrders = async () => {
+    return await axios.get(GET_ALL_ORDERS);
   };
 
   getAllSales = async () => {
@@ -48,6 +54,9 @@ class OLTP {
   };
   getSalesForItemsThatRequireCooking = async () => {
     return await axios.get(GET_REPORT_5);
+  };
+  createOrder = async (payload) => {
+    return await axios.post(CREATE_ORDER_API_PATH, payload);
   };
 }
 

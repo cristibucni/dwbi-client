@@ -2,6 +2,7 @@ import './App.css';
 import React, { useEffect, useState } from 'react';
 import Login from './containers/login';
 import { Route, Routes } from 'react-router-dom';
+import Container from './components/container';
 import Dashboard from './containers/dashboard';
 import { connect } from 'react-redux';
 import { loginByToken } from './store/actions/login';
@@ -9,10 +10,11 @@ import { loginByToken } from './store/actions/login';
 import PrivateRoute from './routes/PrivateRoute';
 import PublicRoute from './routes/PublicRoute';
 import Navigation from './containers/navigation';
-import Container from './components/container';
+
 import Sales from './containers/sales';
 import Menus from './containers/menus';
 import { Reports } from './containers/reports';
+import Orders from './containers/orders';
 
 function App(props) {
   const isAuthenticated = props.auth.isAuthenticated;
@@ -64,6 +66,16 @@ function App(props) {
             <PrivateRoute isAuthenticated={isAuthenticated}>
               <Container>
                 <Reports />
+              </Container>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/orders"
+          element={
+            <PrivateRoute isAuthenticated={isAuthenticated}>
+              <Container>
+                <Orders />
               </Container>
             </PrivateRoute>
           }

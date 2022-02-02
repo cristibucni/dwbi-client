@@ -7,6 +7,7 @@ import _ from 'lodash';
 import ReactEcharts from 'echarts-for-react';
 import HashLoader from 'react-spinners/HashLoader';
 import { css } from '@emotion/react';
+import { LoadingIndicator } from '../../components/loading-indicator';
 const override = css`
   display: block;
   margin: auto;
@@ -197,7 +198,7 @@ export const Reports = () => {
           margin: 'auto',
         }}
       >
-        <HashLoader css={override} color="#1976d2" />
+        <LoadingIndicator />
       </div>
     );
   }

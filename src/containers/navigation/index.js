@@ -36,19 +36,21 @@ const Navigation = (props) => {
       >
         {routes.map((route) => (
           <ListItem disablePadding key={route.name}>
-            <Link
-              to={route.href}
-              style={{
-                display: 'flex',
-                textDecoration: 'none',
-                padding: '8px',
-                alignItems: 'center',
-                width: '100%',
-              }}
-            >
-              <ListItemIcon>{route.icon}</ListItemIcon>
-              <ListItemText primary={route.name} />
-            </Link>
+            <ListItemButton sx={{ width: '100%' }}>
+              <Link
+                to={route.href}
+                style={{
+                  display: 'flex',
+                  textDecoration: 'none',
+                  alignItems: 'center',
+                  color: 'inherit',
+                  width: '100%',
+                }}
+              >
+                <ListItemIcon>{route.icon}</ListItemIcon>
+                <ListItemText primary={route.name} />
+              </Link>
+            </ListItemButton>
           </ListItem>
         ))}
 

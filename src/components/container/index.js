@@ -2,7 +2,7 @@ import React from 'react';
 import Navigation from '../../containers/navigation';
 import Header from './header';
 
-const Container = ({ children }) => {
+const PageContainer = ({ children }) => {
   return (
     <>
       <Header />
@@ -22,4 +22,4 @@ const Container = ({ children }) => {
   );
 };
 
-export default Container;
+export default PageContainer;
