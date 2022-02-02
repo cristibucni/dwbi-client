@@ -15,7 +15,7 @@ import { connect } from 'react-redux';
 import { logout } from '../../store/actions/login';
 
 const Navigation = (props) => {
-  console.log(props);
+  const role = props.auth.user.role;
   return (
     <div
       style={{
@@ -34,25 +34,27 @@ const Navigation = (props) => {
           flexDirection: 'column',
         }}
       >
-        {routes.map((route) => (
-          <ListItem disablePadding key={route.name}>
-            <ListItemButton sx={{ width: '100%' }}>
-              <Link
-                to={route.href}
-                style={{
-                  display: 'flex',
-                  textDecoration: 'none',
-                  alignItems: 'center',
-                  color: 'inherit',
-                  width: '100%',
-                }}
-              >
-                <ListItemIcon>{route.icon}</ListItemIcon>
-                <ListItemText primary={route.name} />
-              </Link>
-            </ListItemButton>
-          </ListItem>
-        ))}
+        {routes
+          .filter((route) => route.roles.includes(role))
+          .map((route) => (
+            <ListItem disablePadding key={route.name}>
+              <ListItemButton sx={{ width: '100%' }}>
+                <Link
+                  to={route.href}
+                  style={{
+                    display: 'flex',
+                    textDecoration: 'none',
+                    alignItems: 'center',
+                    color: 'inherit',
+                    width: '100%',
+                  }}
+                >
+                  <ListItemIcon>{route.icon}</ListItemIcon>
+                  <ListItemText primary={route.name} />
+                </Link>
+              </ListItemButton>
+            </ListItem>
+          ))}
 
         <ListItem disablePadding style={{ marginTop: 'auto' }}>
           <ListItemButton onClick={() => props.logout()}>

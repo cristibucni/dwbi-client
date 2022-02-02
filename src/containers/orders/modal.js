@@ -14,6 +14,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import { Select, MenuItem } from '@mui/material';
 import { ORDER_STATUSES } from '../../utils/constants';
+import { useSelector } from 'react-redux';
+import { isManager, isEmployee } from '../../utils/constants';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -26,6 +28,7 @@ export default function OrderModal({
   selectedStatus,
   editOrder,
 }) {
+  const user = useSelector((state) => state.main.user);
   useEffect(() => {
     if (!_.isEmpty(order)) {
       setOpen(true);
@@ -66,24 +69,29 @@ export default function OrderModal({
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               Order {order.id}
             </Typography>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={selectedStatus}
-              label="Status"
-              onChange={(e) => setSelectedStatus(e.target.value)}
-              sx={{
-                marginRight: '30px',
-                color: 'white',
-              }}
-            >
-              {Object.keys(ORDER_STATUSES).map((status) => (
-                <MenuItem value={ORDER_STATUSES[status]}>{status}</MenuItem>
-              ))}
-            </Select>
-            <Button variant="standard" onClick={() => handleClose()}>
-              Save
-            </Button>
+
+            {(isManager(user) || isEmployee(user)) && (
+              <>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={selectedStatus}
+                  label="Status"
+                  onChange={(e) => setSelectedStatus(e.target.value)}
+                  sx={{
+                    marginRight: '30px',
+                    color: 'white',
+                  }}
+                >
+                  {Object.keys(ORDER_STATUSES).map((status) => (
+                    <MenuItem value={ORDER_STATUSES[status]}>{status}</MenuItem>
+                  ))}
+                </Select>
+                <Button variant="standard" onClick={() => handleClose()}>
+                  Save
+                </Button>
+              </>
+            )}
           </Toolbar>
         </AppBar>
         <List>

@@ -7,6 +7,9 @@ import _ from 'lodash';
 import { ORDER_STATUSES } from '../../utils/constants';
 import OrderModal from './modal';
 import { LoadingIndicator } from '../../components/loading-indicator';
+import { useSelector } from 'react-redux';
+
+import { isManager, isEmployee } from '../../utils/constants';
 
 const Orders = () => {
   const [loading, setLoading] = useState(true);
@@ -14,15 +17,17 @@ const Orders = () => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState(0);
   const [doubleClickedOrder, setDoubleClickedOrder] = useState(null);
-  useEffect(async () => {
-    const { data } = await OLTPService.getAllOrders();
 
-    setOrders(_.uniqBy(data, 'id'));
-    setLoading(false);
+  const user = useSelector((state) => state.main.user);
+  useEffect(() => {
+    getOrders();
   }, []);
 
   const getOrders = async () => {
-    const { data } = await OLTPService.getOrders(199);
+    const { data } =
+      isManager(user) || isEmployee(user)
+        ? await OLTPService.getAllOrders()
+        : await OLTPService.getOrders(user.id);
 
     setOrders(_.uniqBy(data, 'id'));
     setLoading(false);

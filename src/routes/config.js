@@ -1,14 +1,14 @@
-import Dashboard from '../containers/dashboard';
 import { Receipt, Summarize, Paid, Home, MenuBook } from '@mui/icons-material';
 import Menus from '../containers/menus';
 import { Reports } from '../containers/reports';
 import Orders from '../containers/orders';
+import Dashboard from '../containers/dashboard';
 
 export const routes = [
   {
     href: '/dashboard',
-    component: Orders,
-    roles: ['Manager, customer, employee'],
+    component: Dashboard,
+    roles: ['Manager', 'customer', 'employee'],
     name: 'Home',
     icon: <Home />,
     description: 'Dashboard panel',
@@ -16,7 +16,7 @@ export const routes = [
   {
     href: '/orders',
     component: Orders,
-    roles: ['Manager, customer, employee'],
+    roles: ['Manager', 'customer', 'employee'],
     name: 'Orders',
     icon: <Receipt />,
     description: "Manage orders, keep track of what's new",
@@ -24,7 +24,7 @@ export const routes = [
   {
     href: '/menus',
     component: Menus,
-    roles: ['Manager, customer, employee'],
+    roles: ['Manager', 'customer', 'employee'],
     name: 'Menus',
     icon: <MenuBook />,
     description: 'Place an order',

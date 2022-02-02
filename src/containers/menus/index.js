@@ -32,6 +32,7 @@ import Checkbox from '@mui/material/Checkbox';
 import HashLoader from 'react-spinners/HashLoader';
 import { css } from '@emotion/react';
 import { LoadingIndicator } from '../../components/loading-indicator';
+import { useSelector } from 'react-redux';
 const override = css`
   display: block;
   margin: auto;
@@ -44,6 +45,9 @@ const Menus = () => {
   const [menus, setMenus] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [orderLoading, setOrderLoading] = useState(false);
+
+  const user = useSelector((state) => state.main.user);
+
   useEffect(async () => {
     const { data } = await OLTPService.getMenus();
 
@@ -80,7 +84,7 @@ const Menus = () => {
 
   const createNewOrder = async () => {
     const payload = {
-      customerId: 199,
+      customerId: Number(user.id),
       isDelivery,
       items: selectedItems.map((_item) => ({
         id: _item.id,

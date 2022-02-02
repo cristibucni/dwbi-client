@@ -14,7 +14,6 @@ export default function DataTable({ data }) {
     }
   });
   data.forEach((item) => {
-    console.log(item.item);
     if (formattedData.findIndex((_item) => _item.billId === item.billId) >= 0) {
       const index = formattedData.findIndex(
         (_item) => _item.billId === item.billId
@@ -39,8 +38,6 @@ export default function DataTable({ data }) {
     // { field: 'status', headerName: 'Status',  width:200 },
   ];
 
-  console.log(formattedData);
-
   const tableRows = data.map((entry, idx) => ({
     id: idx,
     billId: entry.billId,
@@ -53,8 +50,6 @@ export default function DataTable({ data }) {
     //   entry.items.reduce((acc, curr) => acc.currentPrice + curr.currentPrice) +
     //   ' RON',
   }));
-
-  console.log(tableRows);
 
   const rows = [];
   return (

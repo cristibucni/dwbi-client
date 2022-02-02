@@ -15,8 +15,9 @@ import _ from 'lodash';
 import { ORDER_STATUSES } from '../../utils/constants';
 import { Link } from 'react-router-dom';
 import { routes } from '../../routes/config';
-
-const Dashboard = () => {
+import { connect } from 'react-redux';
+const Dashboard = (props) => {
+  const role = props.auth.user.role;
   return (
     <div
       style={{
@@ -33,6 +34,7 @@ const Dashboard = () => {
         columns={{ xs: 4, sm: 8, md: 12 }}
       >
         {routes
+          .filter((route) => route.roles.includes(role))
           .filter((route) => route.name !== 'Home')
           .map((route, idx) => (
             <Grid item xs={2} sm={4} md={3} key={idx}>
@@ -71,4 +73,8 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+const mapStateToProps = (state) => ({
+  auth: state.main,
+});
+
+export default connect(mapStateToProps)(Dashboard);

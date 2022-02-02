@@ -15,9 +15,12 @@ import Sales from './containers/sales';
 import Menus from './containers/menus';
 import { Reports } from './containers/reports';
 import Orders from './containers/orders';
+import { routes } from './routes/config';
+import { NotFoundPage } from './components/not-found-page';
 
 function App(props) {
   const isAuthenticated = props.auth.isAuthenticated;
+  const user = props.auth.user;
   useEffect(() => {
     if (localStorage.getItem('token')) {
       props.loginByToken(
@@ -26,60 +29,29 @@ function App(props) {
       );
     }
   }, []);
+
+  console.log();
   return (
     <div className="App">
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route
-          path="/dashboard"
-          element={
-            <PrivateRoute isAuthenticated={isAuthenticated}>
-              <Container>
-                <Dashboard />
-              </Container>
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/sales"
-          element={
-            <PrivateRoute isAuthenticated={isAuthenticated}>
-              <Container>
-                <Sales />
-              </Container>
-            </PrivateRoute>
-          }
-        />{' '}
-        <Route
-          path="/menus"
-          element={
-            <PrivateRoute isAuthenticated={isAuthenticated}>
-              <Container>
-                <Menus />
-              </Container>
-            </PrivateRoute>
-          }
-        />{' '}
-        <Route
-          path="/reports"
-          element={
-            <PrivateRoute isAuthenticated={isAuthenticated}>
-              <Container>
-                <Reports />
-              </Container>
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/orders"
-          element={
-            <PrivateRoute isAuthenticated={isAuthenticated}>
-              <Container>
-                <Orders />
-              </Container>
-            </PrivateRoute>
-          }
-        />
+        <Route path="/404" element={<NotFoundPage />} />
+        {routes.map((route) => (
+          <Route
+            key={route.name}
+            path={route.href}
+            element={
+              <PrivateRoute
+                isAuthenticated={isAuthenticated}
+                roles={route.roles}
+              >
+                <Container>
+                  <route.component />
+                </Container>
+              </PrivateRoute>
+            }
+          />
+        ))}
       </Routes>
     </div>
   );
