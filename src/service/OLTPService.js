@@ -11,7 +11,7 @@ import {
   GET_REPORT_4,
   GET_REPORT_5,
   CREATE_ORDER_API_PATH,
-  GET_ALL_ORDERS,
+  GET_ORDER_FIRST_DB,
 } from './constants';
 
 class OLTP {
@@ -24,7 +24,7 @@ class OLTP {
   };
 
   getAllOrders = async () => {
-    return await axios.get(GET_ALL_ORDERS);
+    return await axios.get(GET_ORDER_FIRST_DB);
   };
 
   getAllSales = async () => {

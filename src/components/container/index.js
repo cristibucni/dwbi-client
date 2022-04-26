@@ -10,7 +10,7 @@ const PageContainer = ({ children }) => {
         <Navigation />
         <div
           style={{
-            width: 'calc(100%  - 150px)',
+            width: 'calc(100%  - 250px)',
             textAlign: 'left',
             padding: '20px',
           }}

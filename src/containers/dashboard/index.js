@@ -17,7 +17,6 @@ import { Link } from 'react-router-dom';
 import { routes } from '../../routes/config';
 import { connect } from 'react-redux';
 const Dashboard = (props) => {
-  const role = props.auth.user.role;
   return (
     <div
       style={{
@@ -34,7 +33,6 @@ const Dashboard = (props) => {
         columns={{ xs: 4, sm: 8, md: 12 }}
       >
         {routes
-          .filter((route) => route.roles.includes(role))
           .filter((route) => route.name !== 'Home')
           .map((route, idx) => (
             <Grid item xs={2} sm={4} md={3} key={idx}>

@@ -15,40 +15,22 @@ import Sales from './containers/sales';
 import Menus from './containers/menus';
 import { Reports } from './containers/reports';
 import Orders from './containers/orders';
-import { routes } from './routes/config';
+import { routes, routeDefinitions } from './routes/config';
 import { NotFoundPage } from './components/not-found-page';
 
 function App(props) {
-  const isAuthenticated = props.auth.isAuthenticated;
-  const user = props.auth.user;
-  useEffect(() => {
-    if (localStorage.getItem('token')) {
-      props.loginByToken(
-        localStorage.getItem('username'),
-        localStorage.getItem('token')
-      );
-    }
-  }, []);
-
-  console.log();
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<Login />} />
         <Route path="/404" element={<NotFoundPage />} />
-        {routes.map((route) => (
+        {routeDefinitions.map((route, idx) => (
           <Route
-            key={route.name}
+            key={idx}
             path={route.href}
             element={
-              <PrivateRoute
-                isAuthenticated={isAuthenticated}
-                roles={route.roles}
-              >
-                <Container>
-                  <route.component />
-                </Container>
-              </PrivateRoute>
+              <Container>
+                <route.component />
+              </Container>
             }
           />
         ))}

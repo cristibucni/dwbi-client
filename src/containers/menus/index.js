@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import FirstDBService from '../../service/FirstDBService';
 import OLTPService from '../../service/OLTPService';
 import jwt_decode from 'jwt-decode';
 import {
@@ -46,14 +47,24 @@ const Menus = () => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [orderLoading, setOrderLoading] = useState(false);
 
-  const user = useSelector((state) => state.main.user);
+  const flag = window.location.href.split('/')[3];
 
-  useEffect(async () => {
-    const { data } = await OLTPService.getMenus();
+  useEffect(() => {
+    getMenus();
+  }, [flag]);
 
-    setMenus(data);
-    setLoading(false);
-  }, []);
+  const getMenus = async () => {
+    try {
+      setLoading(true);
+      const { data } = await FirstDBService.getMenus();
+
+      setMenus(data);
+      setLoading(false);
+    } catch (err) {
+      setMenus([]);
+      setLoading(false);
+    }
+  };
 
   const handleAddItem = (item) => {
     if (selectedItems.find((_item) => _item.id === item.id)) {
@@ -84,7 +95,7 @@ const Menus = () => {
 
   const createNewOrder = async () => {
     const payload = {
-      customerId: Number(user.id),
+      customerId: 0,
       isDelivery,
       items: selectedItems.map((_item) => ({
         id: _item.id,

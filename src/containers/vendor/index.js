@@ -1,38 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from '@mui/material';
-import { Delete } from '@mui/icons-material';
-import DashboardTable from './table';
-import _ from 'lodash';
-import { ORDER_STATUSES } from '../../utils/constants';
-import OrderModal from './modal';
-import { LoadingIndicator } from '../../components/loading-indicator';
 import { SERVICE_MAPPING } from '../../service';
+import _ from 'lodash';
+import { LoadingIndicator } from '../../components/loading-indicator';
+import Table from './table';
+import VendorModal from './modal';
+import { Button, IconButton } from '@mui/material';
+import { Delete } from '@mui/icons-material';
 
-const Orders = () => {
+const Vendor = () => {
   const [loading, setLoading] = useState(true);
-  const [orders, setOrders] = useState([]);
+  const [vendors, setVendors] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState(0);
-  const [doubleClickedOrder, setDoubleClickedOrder] = useState(null);
-
+  const [doubleClickedVendor, setDoubleClickedVendor] = useState(null);
   const flag = window.location.href.split('/')[3];
 
   useEffect(() => {
-    getOrders();
+    getVendors();
   }, [flag]);
 
-  const getOrders = async () => {
-    const { data } = await SERVICE_MAPPING[flag].getOrdersFirstDB();
+  const getVendors = async () => {
+    const { data } = await SERVICE_MAPPING[flag].getVendors();
 
-    setOrders(_.uniqBy(data, 'id'));
+    setVendors(data);
     setLoading(false);
   };
 
   const onSelectRow = (e) => {
-    setSelectedRow(e[0]);
-    setSelectedStatus(
-      ORDER_STATUSES[orders.find((order) => order.id === e[0]).status]
-    );
+    setSelectedRow(e.id);
   };
 
   const onDoubleClickRow = (params, event) => {
@@ -40,17 +35,19 @@ const Orders = () => {
       event.defaultMuiPrevented = true;
     }
     const { id } = params;
-    setDoubleClickedOrder(orders.find((_order) => _order.id === id));
+    setDoubleClickedVendor(vendors.find((_vendor) => _vendor.id === id));
   };
 
-  const editOrder = async (order) => {
-    const payload = {
-      billId: order.id,
-      statusId: selectedStatus,
-    };
+  const editVendor = async (vendor) => {
     setLoading(true);
-    await SERVICE_MAPPING[flag].editOrder(payload);
-    await getOrders();
+    const payload = {
+      id: vendor.id,
+      name: vendor.name,
+      email: vendor.email,
+      phone: vendor.phone,
+    };
+    await SERVICE_MAPPING[flag].editVendor(payload);
+    await getVendors();
   };
 
   const handleDelete = async (id) => {
@@ -58,8 +55,8 @@ const Orders = () => {
     const payload = {
       id,
     };
-    await SERVICE_MAPPING[flag].deleteOrder(payload);
-    await getOrders();
+    await SERVICE_MAPPING[flag].deleteVendor(payload);
+    await getVendors();
   };
 
   return (
@@ -68,15 +65,15 @@ const Orders = () => {
         <LoadingIndicator />
       ) : (
         <>
-          <OrderModal
-            order={doubleClickedOrder}
-            setDoubleClickedOrder={setDoubleClickedOrder}
+          <VendorModal
+            vendor={doubleClickedVendor}
+            setDoubleClickedVendor={setDoubleClickedVendor}
             selectedStatus={selectedStatus}
             setSelectedStatus={setSelectedStatus}
-            editOrder={editOrder}
+            editVendor={editVendor}
           />
-          <DashboardTable
-            data={orders}
+          <Table
+            data={vendors}
             onSelectRow={onSelectRow}
             onDoubleClickRow={onDoubleClickRow}
           />
@@ -85,7 +82,7 @@ const Orders = () => {
             variant="contained"
             onClick={() => handleDelete(selectedRow)}
           >
-            Delete selected customer
+            Delete selected vendor
             <Delete />
           </Button>
         </>
@@ -94,4 +91,4 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+export default Vendor;

@@ -1,38 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from '@mui/material';
-import { Delete } from '@mui/icons-material';
-import DashboardTable from './table';
-import _ from 'lodash';
-import { ORDER_STATUSES } from '../../utils/constants';
-import OrderModal from './modal';
-import { LoadingIndicator } from '../../components/loading-indicator';
 import { SERVICE_MAPPING } from '../../service';
+import _ from 'lodash';
+import { LoadingIndicator } from '../../components/loading-indicator';
+import Table from './table';
+import ItemModal from './modal';
+import { Button, IconButton } from '@mui/material';
+import { Delete } from '@mui/icons-material';
 
-const Orders = () => {
+const Item = () => {
   const [loading, setLoading] = useState(true);
-  const [orders, setOrders] = useState([]);
+  const [items, setItems] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState(0);
-  const [doubleClickedOrder, setDoubleClickedOrder] = useState(null);
-
+  const [doubleClickedItem, setDoubleClickedItem] = useState(null);
   const flag = window.location.href.split('/')[3];
 
   useEffect(() => {
-    getOrders();
+    getItems();
   }, [flag]);
 
-  const getOrders = async () => {
-    const { data } = await SERVICE_MAPPING[flag].getOrdersFirstDB();
+  const getItems = async () => {
+    const { data } = await SERVICE_MAPPING[flag].getItems();
 
-    setOrders(_.uniqBy(data, 'id'));
+    setItems(data);
     setLoading(false);
   };
 
   const onSelectRow = (e) => {
-    setSelectedRow(e[0]);
-    setSelectedStatus(
-      ORDER_STATUSES[orders.find((order) => order.id === e[0]).status]
-    );
+    setSelectedRow(e.id);
   };
 
   const onDoubleClickRow = (params, event) => {
@@ -40,17 +35,18 @@ const Orders = () => {
       event.defaultMuiPrevented = true;
     }
     const { id } = params;
-    setDoubleClickedOrder(orders.find((_order) => _order.id === id));
+    setDoubleClickedItem(items.find((_item) => _item.id === id));
   };
 
-  const editOrder = async (order) => {
-    const payload = {
-      billId: order.id,
-      statusId: selectedStatus,
-    };
+  const editItem = async (item) => {
     setLoading(true);
-    await SERVICE_MAPPING[flag].editOrder(payload);
-    await getOrders();
+    const payload = {
+      id: item.id,
+      title: item.title,
+      vendorId: item.vendorId,
+    };
+    await SERVICE_MAPPING[flag].editItem(payload);
+    await getItems();
   };
 
   const handleDelete = async (id) => {
@@ -58,8 +54,8 @@ const Orders = () => {
     const payload = {
       id,
     };
-    await SERVICE_MAPPING[flag].deleteOrder(payload);
-    await getOrders();
+    await SERVICE_MAPPING[flag].deleteItem(payload);
+    await getItems();
   };
 
   return (
@@ -68,15 +64,15 @@ const Orders = () => {
         <LoadingIndicator />
       ) : (
         <>
-          <OrderModal
-            order={doubleClickedOrder}
-            setDoubleClickedOrder={setDoubleClickedOrder}
+          <ItemModal
+            item={doubleClickedItem}
+            setDoubleClickedItem={setDoubleClickedItem}
             selectedStatus={selectedStatus}
             setSelectedStatus={setSelectedStatus}
-            editOrder={editOrder}
+            editItem={editItem}
           />
-          <DashboardTable
-            data={orders}
+          <Table
+            data={items}
             onSelectRow={onSelectRow}
             onDoubleClickRow={onDoubleClickRow}
           />
@@ -85,7 +81,7 @@ const Orders = () => {
             variant="contained"
             onClick={() => handleDelete(selectedRow)}
           >
-            Delete selected customer
+            Delete selected item
             <Delete />
           </Button>
         </>
@@ -94,4 +90,4 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+export default Item;

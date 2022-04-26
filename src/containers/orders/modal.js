@@ -70,28 +70,26 @@ export default function OrderModal({
               Order {order.id}
             </Typography>
 
-            {(isManager(user) || isEmployee(user)) && (
-              <>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={selectedStatus}
-                  label="Status"
-                  onChange={(e) => setSelectedStatus(e.target.value)}
-                  sx={{
-                    marginRight: '30px',
-                    color: 'white',
-                  }}
-                >
-                  {Object.keys(ORDER_STATUSES).map((status) => (
-                    <MenuItem value={ORDER_STATUSES[status]}>{status}</MenuItem>
-                  ))}
-                </Select>
-                <Button variant="standard" onClick={() => handleClose()}>
-                  Save
-                </Button>
-              </>
-            )}
+            <>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={selectedStatus}
+                label="Status"
+                onChange={(e) => setSelectedStatus(e.target.value)}
+                sx={{
+                  marginRight: '30px',
+                  color: 'white',
+                }}
+              >
+                {Object.keys(ORDER_STATUSES).map((status) => (
+                  <MenuItem value={ORDER_STATUSES[status]}>{status}</MenuItem>
+                ))}
+              </Select>
+              <Button variant="standard" onClick={() => handleClose()}>
+                Save
+              </Button>
+            </>
           </Toolbar>
         </AppBar>
         <List>

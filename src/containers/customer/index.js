@@ -1,38 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from '@mui/material';
-import { Delete } from '@mui/icons-material';
-import DashboardTable from './table';
-import _ from 'lodash';
-import { ORDER_STATUSES } from '../../utils/constants';
-import OrderModal from './modal';
-import { LoadingIndicator } from '../../components/loading-indicator';
 import { SERVICE_MAPPING } from '../../service';
+import _ from 'lodash';
+import { LoadingIndicator } from '../../components/loading-indicator';
+import Table from './table';
+import CustomerModal from './modal';
+import { Button, IconButton } from '@mui/material';
+import { Delete } from '@mui/icons-material';
 
-const Orders = () => {
+const Customer = () => {
   const [loading, setLoading] = useState(true);
-  const [orders, setOrders] = useState([]);
+  const [customers, setCustomers] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState(0);
-  const [doubleClickedOrder, setDoubleClickedOrder] = useState(null);
-
+  const [doubleClickedCustomer, setDoubleClickedCustomer] = useState(null);
   const flag = window.location.href.split('/')[3];
 
   useEffect(() => {
-    getOrders();
+    getCustomers();
   }, [flag]);
 
-  const getOrders = async () => {
-    const { data } = await SERVICE_MAPPING[flag].getOrdersFirstDB();
+  const getCustomers = async () => {
+    const { data } = await SERVICE_MAPPING[flag].getCustomers();
 
-    setOrders(_.uniqBy(data, 'id'));
+    setCustomers(data);
     setLoading(false);
   };
 
   const onSelectRow = (e) => {
-    setSelectedRow(e[0]);
-    setSelectedStatus(
-      ORDER_STATUSES[orders.find((order) => order.id === e[0]).status]
-    );
+    setSelectedRow(e.id);
   };
 
   const onDoubleClickRow = (params, event) => {
@@ -40,17 +35,22 @@ const Orders = () => {
       event.defaultMuiPrevented = true;
     }
     const { id } = params;
-    setDoubleClickedOrder(orders.find((_order) => _order.id === id));
+    setDoubleClickedCustomer(
+      customers.find((_customer) => _customer.id === id)
+    );
   };
 
-  const editOrder = async (order) => {
-    const payload = {
-      billId: order.id,
-      statusId: selectedStatus,
-    };
+  const editCustomer = async (customer) => {
     setLoading(true);
-    await SERVICE_MAPPING[flag].editOrder(payload);
-    await getOrders();
+    const payload = {
+      customerId: customer.id,
+      firstName: customer.firstName,
+      lastName: customer.lastName,
+      email: customer.email,
+      phone: customer.phone,
+    };
+    await SERVICE_MAPPING[flag].editCustomer(payload);
+    await getCustomers();
   };
 
   const handleDelete = async (id) => {
@@ -58,8 +58,8 @@ const Orders = () => {
     const payload = {
       id,
     };
-    await SERVICE_MAPPING[flag].deleteOrder(payload);
-    await getOrders();
+    await SERVICE_MAPPING[flag].deleteCustomer(payload);
+    await getCustomers();
   };
 
   return (
@@ -68,15 +68,15 @@ const Orders = () => {
         <LoadingIndicator />
       ) : (
         <>
-          <OrderModal
-            order={doubleClickedOrder}
-            setDoubleClickedOrder={setDoubleClickedOrder}
+          <CustomerModal
+            customer={doubleClickedCustomer}
+            setDoubleClickedCustomer={setDoubleClickedCustomer}
             selectedStatus={selectedStatus}
             setSelectedStatus={setSelectedStatus}
-            editOrder={editOrder}
+            editCustomer={editCustomer}
           />
-          <DashboardTable
-            data={orders}
+          <Table
+            data={customers}
             onSelectRow={onSelectRow}
             onDoubleClickRow={onDoubleClickRow}
           />
@@ -94,4 +94,4 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+export default Customer;

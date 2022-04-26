@@ -1,12 +1,7 @@
 import React from 'react';
 import { routes } from '../../routes/config';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import { Link } from 'react-router-dom';
-import history from '../../utils/history';
+import { MenuItem } from './comp';
 
 import { Logout } from '@mui/icons-material';
 
@@ -15,11 +10,10 @@ import { connect } from 'react-redux';
 import { logout } from '../../store/actions/login';
 
 const Navigation = (props) => {
-  const role = props.auth.user.role;
   return (
     <div
       style={{
-        width: '150px',
+        width: '250px',
         display: 'flex',
         height: 'calc(100vh - 64px)',
         flexDirection: 'column',
@@ -34,36 +28,9 @@ const Navigation = (props) => {
           flexDirection: 'column',
         }}
       >
-        {routes
-          .filter((route) => route.roles.includes(role))
-          .map((route) => (
-            <ListItem disablePadding key={route.name}>
-              <ListItemButton sx={{ width: '100%' }}>
-                <Link
-                  to={route.href}
-                  style={{
-                    display: 'flex',
-                    textDecoration: 'none',
-                    alignItems: 'center',
-                    color: 'inherit',
-                    width: '100%',
-                  }}
-                >
-                  <ListItemIcon>{route.icon}</ListItemIcon>
-                  <ListItemText primary={route.name} />
-                </Link>
-              </ListItemButton>
-            </ListItem>
-          ))}
-
-        <ListItem disablePadding style={{ marginTop: 'auto' }}>
-          <ListItemButton onClick={() => props.logout()}>
-            <ListItemIcon>
-              <Logout />
-            </ListItemIcon>
-            <ListItemText primary="Log out" />
-          </ListItemButton>
-        </ListItem>
+        {routes.map((route, index) => (
+          <MenuItem key={index} item={route} />
+        ))}
       </List>
     </div>
   );
