@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
+import { tableConfig } from '../../utils/constants';
 
 export default function DataTable({ data, onSelectRow, onDoubleClickRow }) {
   const columns = [
@@ -8,16 +9,15 @@ export default function DataTable({ data, onSelectRow, onDoubleClickRow }) {
     { field: 'firstName', headerName: 'First name', width: 150 },
     { field: 'phone', headerName: 'Phone' },
     { field: 'email', headerName: 'Email', width: 300 },
-    { field: 'dateOfBirth', headerName: 'Date of birth', width: 150 },
+    { field: 'dateOfBirth', headerName: 'Date of birth', width: 300 },
   ];
 
   return (
-    <div style={{ height: 400, width: '100%' }}>
+    <div style={{ height: '700px', width: '100%' }}>
       <DataGrid
         rows={data}
         columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
+        {...tableConfig}
         onRowClick={onSelectRow}
         onRowDoubleClick={onDoubleClickRow}
       />

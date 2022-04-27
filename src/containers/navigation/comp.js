@@ -20,7 +20,7 @@ const SingleLevel = ({ item }) => {
 
 const MultiLevel = ({ item }) => {
   const { items: children } = item;
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   const handleClick = () => {
     setOpen((prev) => !prev);
@@ -28,9 +28,19 @@ const MultiLevel = ({ item }) => {
 
   return (
     <React.Fragment>
-      <ListItem button onClick={handleClick}>
-        <ListItemIcon>{item.icon}</ListItemIcon>
-        <ListItemText primary={item.name} />
+      <ListItem
+        sx={{
+          borderBottom: open ? '0' : '1px solid #1976D2',
+          marginBottom: '1px',
+          transition: 'all 0.5s',
+          color: '#1976D2',
+          fontWeight: 'bold',
+        }}
+        button
+        onClick={handleClick}
+      >
+        <ListItemIcon sx={{ color: '#1976D2' }}>{item.icon}</ListItemIcon>
+        <ListItemText sx={{ fontWeight: 'bold' }} primary={item.name} />
         {open ? (
           <ExpandLess sx={{ marginLeft: 'auto' }} />
         ) : (
@@ -41,6 +51,7 @@ const MultiLevel = ({ item }) => {
         <List component="div" disablePadding>
           {children.map((child, key) => (
             <Link
+              key={key}
               to={child.href}
               style={{
                 display: 'flex',

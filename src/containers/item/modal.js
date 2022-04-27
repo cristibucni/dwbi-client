@@ -18,13 +18,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function ItemModal({
-  item,
-  setDoubleClickedItem,
-  setSelectedStatus,
-  selectedStatus,
-  editItem,
-}) {
+export default function ItemModal({ item, setDoubleClickedItem, editItem }) {
   const [edit, setEdit] = useState(false);
   const [newItem, setNewItem] = useState({ ...item });
   const [open, setOpen] = useState(false);
@@ -36,10 +30,6 @@ export default function ItemModal({
       setEdit(false);
     }
   }, [item]);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
 
   const onEditClick = () => {
     setEdit(!edit);
@@ -131,7 +121,8 @@ export default function ItemModal({
         )}
 
         <ButtonGroup
-          sx={{ gap: '10px' }}
+          disableElevation
+          sx={{ gap: '10px', justifyContent: 'flex-end', marginRight: '10px' }}
           variant="contained"
           aria-label="outlined primary button group"
         >

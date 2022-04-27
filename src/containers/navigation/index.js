@@ -3,12 +3,6 @@ import { routes } from '../../routes/config';
 import List from '@mui/material/List';
 import { MenuItem } from './comp';
 
-import { Logout } from '@mui/icons-material';
-
-import { connect } from 'react-redux';
-
-import { logout } from '../../store/actions/login';
-
 const Navigation = (props) => {
   return (
     <div
@@ -35,8 +29,5 @@ const Navigation = (props) => {
     </div>
   );
 };
-const mapStateToProps = (state) => ({
-  auth: state.main,
-});
 
-export default connect(mapStateToProps, { logout })(Navigation);
+export default Navigation;

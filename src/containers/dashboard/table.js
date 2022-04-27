@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import dayjs from 'dayjs';
 
 export default function DataTable({ data, onSelectRow }) {
   function calculateItemsTotal(items) {

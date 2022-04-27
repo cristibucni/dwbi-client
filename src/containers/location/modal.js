@@ -37,10 +37,6 @@ export default function LocationModal({
     }
   }, [location]);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
   const onEditClick = () => {
     setEdit(!edit);
   };
@@ -140,7 +136,8 @@ export default function LocationModal({
         )}
 
         <ButtonGroup
-          sx={{ gap: '10px' }}
+          disableElevation
+          sx={{ gap: '10px', justifyContent: 'flex-end', marginRight: '10px' }}
           variant="contained"
           aria-label="outlined primary button group"
         >

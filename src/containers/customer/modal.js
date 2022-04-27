@@ -21,8 +21,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function CustomerModal({
   customer,
   setDoubleClickedCustomer,
-  setSelectedStatus,
-  selectedStatus,
   editCustomer,
 }) {
   const [edit, setEdit] = useState(false);
@@ -35,10 +33,6 @@ export default function CustomerModal({
       setNewCustomer(customer);
     }
   }, [customer]);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
 
   const onEditClick = () => {
     setEdit(!edit);
@@ -165,7 +159,8 @@ export default function CustomerModal({
         )}
 
         <ButtonGroup
-          sx={{ gap: '10px' }}
+          disableElevation
+          sx={{ gap: '10px', justifyContent: 'flex-end', marginRight: '10px' }}
           variant="contained"
           aria-label="outlined primary button group"
         >

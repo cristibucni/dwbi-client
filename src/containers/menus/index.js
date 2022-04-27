@@ -1,44 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import FirstDBService from '../../service/FirstDBService';
-import OLTPService from '../../service/OLTPService';
-import jwt_decode from 'jwt-decode';
 import {
-  Select,
-  MenuItem,
-  Button,
   FormControlLabel,
   Switch,
   TextField,
   ButtonGroup,
+  Typography,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Checkbox,
 } from '@mui/material';
-import DashboardTable from './table';
-import _ from 'lodash';
-import { ORDER_STATUSES } from '../../utils/constants';
 
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
-
-import HashLoader from 'react-spinners/HashLoader';
-import { css } from '@emotion/react';
 import { LoadingIndicator } from '../../components/loading-indicator';
-import { useSelector } from 'react-redux';
-const override = css`
-  display: block;
-  margin: auto;
-  border-color: red;
-`;
+
+import { SERVICE_MAPPING } from '../../service';
 
 const Menus = () => {
   const [loading, setLoading] = useState(true);
@@ -46,6 +31,7 @@ const Menus = () => {
   const [menus, setMenus] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [orderLoading, setOrderLoading] = useState(false);
+  const [customerId, setCustomerId] = useState(0);
 
   const flag = window.location.href.split('/')[3];
 
@@ -56,11 +42,12 @@ const Menus = () => {
   const getMenus = async () => {
     try {
       setLoading(true);
-      const { data } = await FirstDBService.getMenus();
+      const { data } = await SERVICE_MAPPING[flag].getMenus();
 
       setMenus(data);
       setLoading(false);
     } catch (err) {
+      console.log(err);
       setMenus([]);
       setLoading(false);
     }
@@ -95,7 +82,7 @@ const Menus = () => {
 
   const createNewOrder = async () => {
     const payload = {
-      customerId: 0,
+      customerId,
       isDelivery,
       items: selectedItems.map((_item) => ({
         id: _item.id,
@@ -105,11 +92,11 @@ const Menus = () => {
 
     try {
       setOrderLoading(true);
-      await OLTPService.createOrder(payload);
+      await SERVICE_MAPPING[flag].createOrder(payload);
       setSelectedItems([]);
       setOrderLoading(false);
     } catch (err) {
-      console.log(err);
+      setOrderLoading(false);
     }
   };
 
@@ -120,8 +107,8 @@ const Menus = () => {
       ) : (
         <div style={{ display: 'flex', width: '100%', gap: '30px' }}>
           <div style={{ width: '65%' }}>
-            {menus.map((menu) => (
-              <Accordion>
+            {menus.map((menu, idx) => (
+              <Accordion key={idx}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1a-content"
@@ -202,45 +189,63 @@ const Menus = () => {
               {orderLoading ? (
                 <LoadingIndicator />
               ) : (
-                selectedItems.map((item) => (
-                  <div
-                    key={item.id}
-                    style={{
-                      width: '100%',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      margin: '10px 0',
-                      padding: '10px 0',
-                      borderBottom: '1px solid',
-                    }}
-                  >
-                    {' '}
-                    <div>{item.title}</div>
-                    <ButtonGroup
-                      variant="contained"
-                      aria-label="outlined primary button group"
-                      sx={{ marginLeft: 'auto', marginRight: '15px' }}
+                <>
+                  <TextField
+                    id="outlined-basic"
+                    label="Customer ID"
+                    variant="outlined"
+                    name={'customerId'}
+                    fullWidth
+                    sx={{ marginTop: '10px' }}
+                    value={customerId}
+                    onChange={(e) => setCustomerId(Number(e.target.value))}
+                  />
+                  {selectedItems.map((item) => (
+                    <div
+                      key={item.id}
+                      style={{
+                        width: '100%',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        margin: '10px 0',
+                        padding: '10px 0',
+                        borderBottom: '1px solid',
+                      }}
                     >
-                      <Button
-                        onClick={() =>
-                          handleModifyQuantity(item, Number(item.quantity) - 1)
-                        }
+                      {' '}
+                      <div>{item.title}</div>
+                      <ButtonGroup
+                        variant="contained"
+                        aria-label="outlined primary button group"
+                        sx={{ marginLeft: 'auto', marginRight: '15px' }}
                       >
-                        -
-                      </Button>
-                      <Button color="secondary">{item.quantity}</Button>
-                      <Button
-                        onClick={() =>
-                          handleModifyQuantity(item, Number(item.quantity) + 1)
-                        }
-                      >
-                        +
-                      </Button>
-                    </ButtonGroup>
-                    <div>{item.quantity * item.price} RON</div>
-                  </div>
-                ))
+                        <Button
+                          onClick={() =>
+                            handleModifyQuantity(
+                              item,
+                              Number(item.quantity) - 1
+                            )
+                          }
+                        >
+                          -
+                        </Button>
+                        <Button color="secondary">{item.quantity}</Button>
+                        <Button
+                          onClick={() =>
+                            handleModifyQuantity(
+                              item,
+                              Number(item.quantity) + 1
+                            )
+                          }
+                        >
+                          +
+                        </Button>
+                      </ButtonGroup>
+                      <div>{item.quantity * item.price} RON</div>
+                    </div>
+                  ))}
+                </>
               )}
               <div
                 style={{

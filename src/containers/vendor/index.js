@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { SERVICE_MAPPING } from '../../service';
-import _ from 'lodash';
 import { LoadingIndicator } from '../../components/loading-indicator';
 import Table from './table';
 import VendorModal from './modal';
-import { Button, IconButton } from '@mui/material';
+import { Button, Paper } from '@mui/material';
 import { Delete } from '@mui/icons-material';
+import { CreateVendor } from './create';
 
 const Vendor = () => {
   const [loading, setLoading] = useState(true);
@@ -16,14 +16,21 @@ const Vendor = () => {
   const flag = window.location.href.split('/')[3];
 
   useEffect(() => {
+    setLoading(true);
+    setVendors([]);
     getVendors();
   }, [flag]);
 
   const getVendors = async () => {
-    const { data } = await SERVICE_MAPPING[flag].getVendors();
+    try {
+      const { data } = await SERVICE_MAPPING[flag].getVendors();
 
-    setVendors(data);
-    setLoading(false);
+      setVendors(data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const onSelectRow = (e) => {
@@ -59,6 +66,16 @@ const Vendor = () => {
     await getVendors();
   };
 
+  const onCreateVendor = async (payload) => {
+    try {
+      setLoading(true);
+      await SERVICE_MAPPING[flag].createVendor(payload);
+      await getVendors();
+    } catch (err) {
+      setLoading(false);
+    }
+  };
+
   return (
     <div>
       {loading ? (
@@ -72,19 +89,38 @@ const Vendor = () => {
             setSelectedStatus={setSelectedStatus}
             editVendor={editVendor}
           />
-          <Table
-            data={vendors}
-            onSelectRow={onSelectRow}
-            onDoubleClickRow={onDoubleClickRow}
-          />
-          <Button
-            sx={{ marginTop: '20px' }}
-            variant="contained"
-            onClick={() => handleDelete(selectedRow)}
-          >
-            Delete selected vendor
-            <Delete />
-          </Button>
+          <div style={{ display: 'flex', width: '100%', gap: '30px' }}>
+            <div style={{ width: '65%' }}>
+              <Table
+                data={vendors}
+                onSelectRow={onSelectRow}
+                onDoubleClickRow={onDoubleClickRow}
+              />
+              <Button
+                sx={{ marginTop: '20px' }}
+                variant="contained"
+                onClick={() => handleDelete(selectedRow)}
+              >
+                Delete selected vendor
+                <Delete />
+              </Button>
+            </div>
+            <div style={{ width: '30%', minHeight: '500px' }}>
+              {' '}
+              <Paper
+                elevation={3}
+                sx={{
+                  width: '100%',
+                  minHeight: '500px',
+                  padding: '16px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                }}
+              >
+                <CreateVendor onSubmit={onCreateVendor} />
+              </Paper>
+            </div>
+          </div>
         </>
       )}
     </div>

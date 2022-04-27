@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import dayjs from 'dayjs';
-import { IconButton } from '@mui/material';
-import { List } from '@mui/icons-material';
+import { tableConfig } from '../../utils/constants';
 
 export default function DataTable({ data, onSelectRow, onDoubleClickRow }) {
   function calculateItemsTotal(items) {
@@ -28,12 +26,11 @@ export default function DataTable({ data, onSelectRow, onDoubleClickRow }) {
     status: order.status,
   }));
   return (
-    <div style={{ height: 800 }}>
+    <div style={{ height: 700 }}>
       <DataGrid
         rows={rows}
         columns={columns}
-        rowsPerPageOptions={[5, 10, 15, 30, 100]}
-        checkboxSelection={false}
+        {...tableConfig}
         onSelectionModelChange={onSelectRow}
         onCellDoubleClick={onDoubleClickRow}
       />

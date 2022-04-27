@@ -17,12 +17,8 @@ import Vendor from '../containers/vendor';
 
 export const routes = [
   {
-    href: '/',
-    component: Dashboard,
-    roles: ['Manager', 'customer', 'employee'],
     name: 'First DB',
     icon: <Storage />,
-    description: 'Dashboard panel',
     items: [
       {
         href: '/firstdb/customer',
@@ -51,10 +47,8 @@ export const routes = [
       {
         href: '/firstdb/order',
         component: Orders,
-        roles: ['Manager', 'customer', 'employee'],
         name: 'Order',
         icon: <ShoppingBag />,
-        description: 'Place an order',
       },
       {
         href: '/firstdb/vendor',
@@ -65,12 +59,8 @@ export const routes = [
     ],
   },
   {
-    href: '/',
-    component: Dashboard,
-    roles: ['Manager', 'customer', 'employee'],
     name: 'Second DB',
     icon: <Storage />,
-    description: 'Dashboard panel',
     items: [
       {
         href: '/seconddb/item',
@@ -81,10 +71,8 @@ export const routes = [
       {
         href: '/seconddb/order',
         component: Orders,
-        roles: ['Manager', 'customer', 'employee'],
         name: 'Order',
         icon: <ShoppingBag />,
-        description: 'Place an order',
       },
       {
         href: '/seconddb/vendor',
@@ -95,12 +83,8 @@ export const routes = [
     ],
   },
   {
-    href: '/',
-    component: Dashboard,
-    roles: ['Manager', 'customer', 'employee'],
     name: 'Global DB',
     icon: <Storage />,
-    description: 'Dashboard panel',
     items: [
       {
         href: '/globaldb/item',
@@ -112,10 +96,8 @@ export const routes = [
       {
         href: '/globaldb/order',
         component: Orders,
-        roles: ['Manager', 'customer', 'employee'],
         name: 'Order',
         icon: <ShoppingBag />,
-        description: 'Place an order',
       },
       {
         href: '/globaldb/vendor',
@@ -127,60 +109,19 @@ export const routes = [
   },
 ];
 
+const collect = (array, result) => {
+  array.forEach((el) => {
+    if (el.items) {
+      collect(el.items, result);
+    } else {
+      result.push({ href: el.href, component: el.component });
+    }
+  });
+};
+
+const parsedRoutes = [];
+collect(routes, parsedRoutes);
 export const routeDefinitions = [
-  {
-    href: '/',
-    component: Dashboard,
-  },
-  {
-    href: '/firstdb/order',
-    component: Orders,
-  },
-  {
-    href: '/firstdb/customer',
-    component: Customer,
-  },
-  {
-    href: '/firstdb/item',
-    component: Item,
-  },
-  {
-    href: '/firstdb/location',
-    component: Location,
-  },
-  {
-    href: '/firstdb/menu',
-    component: Menus,
-  },
-  {
-    href: '/firstdb/vendor',
-    component: Vendor,
-  },
-  {
-    href: '/seconddb/order',
-    component: Orders,
-  },
-  {
-    href: '/seconddb/item',
-    component: Item,
-  },
-
-  {
-    href: '/seconddb/vendor',
-    component: Vendor,
-  },
-  {
-    href: '/globaldb/order',
-    component: Orders,
-  },
-
-  {
-    href: '/globaldb/item',
-    component: Item,
-  },
-
-  {
-    href: '/globaldb/vendor',
-    component: Vendor,
-  },
+  { href: '/', component: Dashboard },
+  ...parsedRoutes,
 ];

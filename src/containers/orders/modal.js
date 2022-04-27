@@ -14,8 +14,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import { Select, MenuItem } from '@mui/material';
 import { ORDER_STATUSES } from '../../utils/constants';
-import { useSelector } from 'react-redux';
-import { isManager, isEmployee } from '../../utils/constants';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -28,17 +26,12 @@ export default function OrderModal({
   selectedStatus,
   editOrder,
 }) {
-  const user = useSelector((state) => state.main.user);
   useEffect(() => {
     if (!_.isEmpty(order)) {
       setOpen(true);
     }
   }, [order]);
   const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
 
   const handleClose = () => {
     editOrder(order);

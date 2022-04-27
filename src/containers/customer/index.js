@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { SERVICE_MAPPING } from '../../service';
-import _ from 'lodash';
 import { LoadingIndicator } from '../../components/loading-indicator';
 import Table from './table';
 import CustomerModal from './modal';
-import { Button, IconButton } from '@mui/material';
+import { Button, Paper } from '@mui/material';
 import { Delete } from '@mui/icons-material';
+import { CreateCustomer } from './create';
 
 const Customer = () => {
   const [loading, setLoading] = useState(true);
@@ -16,14 +16,21 @@ const Customer = () => {
   const flag = window.location.href.split('/')[3];
 
   useEffect(() => {
+    setLoading(true);
+    setCustomers([]);
     getCustomers();
   }, [flag]);
 
   const getCustomers = async () => {
-    const { data } = await SERVICE_MAPPING[flag].getCustomers();
+    try {
+      const { data } = await SERVICE_MAPPING[flag].getCustomers();
 
-    setCustomers(data);
-    setLoading(false);
+      setCustomers(data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const onSelectRow = (e) => {
@@ -62,6 +69,16 @@ const Customer = () => {
     await getCustomers();
   };
 
+  const onCreateCustomer = async (payload) => {
+    try {
+      setLoading(true);
+      await SERVICE_MAPPING[flag].createCustomer(payload);
+      await getCustomers();
+    } catch (err) {
+      setLoading(false);
+    }
+  };
+
   return (
     <div>
       {loading ? (
@@ -75,19 +92,37 @@ const Customer = () => {
             setSelectedStatus={setSelectedStatus}
             editCustomer={editCustomer}
           />
-          <Table
-            data={customers}
-            onSelectRow={onSelectRow}
-            onDoubleClickRow={onDoubleClickRow}
-          />
-          <Button
-            sx={{ marginTop: '20px' }}
-            variant="contained"
-            onClick={() => handleDelete(selectedRow)}
-          >
-            Delete selected customer
-            <Delete />
-          </Button>
+          <div style={{ display: 'flex', width: '100%', gap: '30px' }}>
+            <div style={{ width: '65%' }}>
+              <Table
+                data={customers}
+                onSelectRow={onSelectRow}
+                onDoubleClickRow={onDoubleClickRow}
+              />
+              <Button
+                sx={{ marginTop: '20px' }}
+                variant="contained"
+                onClick={() => handleDelete(selectedRow)}
+              >
+                Delete selected customer
+                <Delete />
+              </Button>
+            </div>
+            <div style={{ width: '30%', minHeight: '500px' }}>
+              <Paper
+                elevation={3}
+                sx={{
+                  width: '100%',
+                  minHeight: '500px',
+                  padding: '16px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                }}
+              >
+                <CreateCustomer onSubmit={onCreateCustomer} />
+              </Paper>
+            </div>
+          </div>
         </>
       )}
     </div>

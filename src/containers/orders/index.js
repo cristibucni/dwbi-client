@@ -18,14 +18,21 @@ const Orders = () => {
   const flag = window.location.href.split('/')[3];
 
   useEffect(() => {
+    setLoading(true);
+    setOrders([]);
     getOrders();
   }, [flag]);
 
   const getOrders = async () => {
-    const { data } = await SERVICE_MAPPING[flag].getOrdersFirstDB();
+    try {
+      const { data } = await SERVICE_MAPPING[flag].getOrders();
 
-    setOrders(_.uniqBy(data, 'id'));
-    setLoading(false);
+      setOrders(_.uniqBy(data, 'id'));
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const onSelectRow = (e) => {
@@ -85,7 +92,7 @@ const Orders = () => {
             variant="contained"
             onClick={() => handleDelete(selectedRow)}
           >
-            Delete selected customer
+            Delete selected order
             <Delete />
           </Button>
         </>

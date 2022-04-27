@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { SERVICE_MAPPING } from '../../service';
-import _ from 'lodash';
 import { LoadingIndicator } from '../../components/loading-indicator';
 import Table from './table';
 import LocationModal from './modal';
-import { Button, IconButton } from '@mui/material';
+import { Button, Paper } from '@mui/material';
 import { Delete } from '@mui/icons-material';
+import { CreateLocation } from './create';
 
 const Location = () => {
   const [loading, setLoading] = useState(true);
@@ -16,14 +16,20 @@ const Location = () => {
   const flag = window.location.href.split('/')[3];
 
   useEffect(() => {
+    setLoading(true);
     getLocations();
   }, [flag]);
 
   const getLocations = async () => {
-    const { data } = await SERVICE_MAPPING[flag].getLocations();
+    try {
+      const { data } = await SERVICE_MAPPING[flag].getLocations();
 
-    setLocations(data);
-    setLoading(false);
+      setLocations(data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const onSelectRow = (e) => {
@@ -52,13 +58,22 @@ const Location = () => {
   };
 
   const handleDelete = async (id) => {
-    console.log(id);
     setLoading(true);
     const payload = {
       id,
     };
     await SERVICE_MAPPING[flag].deleteLocation(payload);
     await getLocations();
+  };
+
+  const onCreateLocation = async (payload) => {
+    try {
+      setLoading(true);
+      await SERVICE_MAPPING[flag].createLocation(payload);
+      await getLocations();
+    } catch (err) {
+      setLoading(false);
+    }
   };
 
   return (
@@ -74,19 +89,37 @@ const Location = () => {
             setSelectedStatus={setSelectedStatus}
             editLocation={editLocation}
           />
-          <Table
-            data={locations}
-            onSelectRow={onSelectRow}
-            onDoubleClickRow={onDoubleClickRow}
-          />
-          <Button
-            sx={{ marginTop: '20px' }}
-            variant="contained"
-            onClick={() => handleDelete(selectedRow)}
-          >
-            Delete selected location
-            <Delete />
-          </Button>
+          <div style={{ display: 'flex', width: '100%', gap: '30px' }}>
+            <div style={{ width: '65%' }}>
+              <Table
+                data={locations}
+                onSelectRow={onSelectRow}
+                onDoubleClickRow={onDoubleClickRow}
+              />
+              <Button
+                sx={{ marginTop: '20px' }}
+                variant="contained"
+                onClick={() => handleDelete(selectedRow)}
+              >
+                Delete selected location
+                <Delete />
+              </Button>
+            </div>
+            <div style={{ width: '30%', minHeight: '500px' }}>
+              <Paper
+                elevation={3}
+                sx={{
+                  width: '100%',
+                  minHeight: '500px',
+                  padding: '16px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                }}
+              >
+                <CreateLocation onSubmit={onCreateLocation} />
+              </Paper>
+            </div>
+          </div>
         </>
       )}
     </div>

@@ -12,4 +12,9 @@ export const isManager = (user) => user.role === 'Manager';
 export const isCustomer = (user) => user.role === 'customer';
 export const isEmployee = (user) => user.role === 'employee';
 
+export const tableConfig = {
+  rowsPerPageOptions: [10, 20, 30, 50, 100],
+  checkboxSelection: false,
+};
+
 export { ORDER_STATUSES };

@@ -1,21 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
-  Box,
   Card,
   CardActions,
   CardContent,
   Grid,
   Typography,
+  Button,
 } from '@mui/material';
-import OLTPService from '../../service/OLTPService';
-import jwt_decode from 'jwt-decode';
-import { Select, MenuItem, Button } from '@mui/material';
-import DashboardTable from './table';
-import _ from 'lodash';
-import { ORDER_STATUSES } from '../../utils/constants';
 import { Link } from 'react-router-dom';
 import { routes } from '../../routes/config';
 import { connect } from 'react-redux';
+
 const Dashboard = (props) => {
   return (
     <div
@@ -35,34 +30,33 @@ const Dashboard = (props) => {
         {routes
           .filter((route) => route.name !== 'Home')
           .map((route, idx) => (
-            <Grid item xs={2} sm={4} md={3} key={idx}>
+            <Grid item xs={2} sm={4} md={4} key={idx}>
               <Card>
                 <CardContent>
-                  <Typography
-                    sx={{ fontSize: 14 }}
-                    color="text.secondary"
-                    gutterBottom
-                  >
-                    Navigate
-                  </Typography>
                   <Typography variant="h5" component="div">
                     {route.name}
                   </Typography>
-                  <Typography variant="body2">{route.description}</Typography>
+                  {route.items.map((child, key) => (
+                    <React.Fragment key={key}>
+                      <Link
+                        to={child.href}
+                        style={{
+                          textDecoration: 'none',
+                          color: 'inherit',
+                          width: '100%',
+                        }}
+                      >
+                        <Button
+                          size="small"
+                          sx={{ justifyContent: 'flex-start' }}
+                        >
+                          {child.name}
+                        </Button>
+                      </Link>
+                      <br />
+                    </React.Fragment>
+                  ))}
                 </CardContent>
-                <CardActions>
-                  <Link
-                    to={route.href}
-                    style={{
-                      textDecoration: 'none',
-                      alignItems: 'center',
-                      color: 'inherit',
-                      width: '100%',
-                    }}
-                  >
-                    <Button size="small">Access</Button>
-                  </Link>
-                </CardActions>
               </Card>
             </Grid>
           ))}
