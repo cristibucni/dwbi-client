@@ -36,7 +36,7 @@ const SECOND_DB = {
   CREATE_LOCATION: '/api/LocationSecondDb/Create',
   UPDATE_LOCATION: '/api/LocationSecondDb/Update',
   DELETE_LOCATION: '/api/LocationSecondDb/Delete',
-  GET_MENU: '/api/MenuSecondDb/Get',
+  GET_MENU: '/api/MenuFirstDb/Get',
   GET_ORDER: '/api/OrderSecondDb/Get',
   CREATE_ORDER: '/api/OrderSecondDb/Create',
   UPDATE_ORDER: '/api/OrderSecondDb/Update',
