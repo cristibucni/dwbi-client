@@ -28,7 +28,7 @@ const SECOND_DB = {
   CREATE_CUSTOMER: '/api/CustomerSecondDb/Create',
   UPDATE_CUSTOMER: '/api/CustomerSecondDb/Update',
   DELETE_CUSTOMER: '/api/CustomerSecondDb/Delete',
-  GET_ITEM: '/api/ItemSecondDb/Get',
+  GET_ITEM: '/api/ItemFirstDb/Get',
   CREATE_ITEM: '/api/ItemSecondDb/Create',
   UPDATE_ITEM: '/api/ItemSecondDb/Update',
   DELETE_ITEM: '/api/ItemSecondDb/Delete',
