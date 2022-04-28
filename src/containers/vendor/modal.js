@@ -24,6 +24,7 @@ export default function VendorModal({
   setSelectedStatus,
   selectedStatus,
   editVendor,
+  flag,
 }) {
   const [edit, setEdit] = useState(false);
   const [newVendor, setNewVendor] = useState({ ...vendor });
@@ -84,34 +85,40 @@ export default function VendorModal({
             <ListItem button>
               <ListItemText primary={`Vendor ID`} secondary={newVendor.id} />
             </ListItem>
-            <TextField
-              sx={{ margin: '15px' }}
-              id="outlined-basic"
-              label="Name"
-              variant="outlined"
-              name={'name'}
-              value={newVendor.name}
-              onChange={(e) => handleEdit(e)}
-            />
-            <TextField
-              sx={{ margin: '15px' }}
-              id="outlined-basic"
-              label="Email"
-              variant="outlined"
-              name={'email'}
-              value={newVendor.email}
-              onChange={(e) => handleEdit(e)}
-            />
+            {(flag === 'firstdb' || flag === 'globaldb') && (
+              <TextField
+                sx={{ margin: '15px' }}
+                id="outlined-basic"
+                label="Name"
+                variant="outlined"
+                name={'name'}
+                value={newVendor.name}
+                onChange={(e) => handleEdit(e)}
+              />
+            )}
+            {(flag === 'seconddb' || flag === 'globaldb') && (
+              <>
+                <TextField
+                  sx={{ margin: '15px' }}
+                  id="outlined-basic"
+                  label="Email"
+                  variant="outlined"
+                  name={'email'}
+                  value={newVendor.email}
+                  onChange={(e) => handleEdit(e)}
+                />
 
-            <TextField
-              sx={{ margin: '15px' }}
-              id="outlined-basic"
-              label="Phone"
-              variant="outlined"
-              name={'phone'}
-              value={newVendor.phone}
-              onChange={(e) => handleEdit(e)}
-            />
+                <TextField
+                  sx={{ margin: '15px' }}
+                  id="outlined-basic"
+                  label="Phone"
+                  variant="outlined"
+                  name={'phone'}
+                  value={newVendor.phone}
+                  onChange={(e) => handleEdit(e)}
+                />
+              </>
+            )}
           </>
         ) : (
           <List>

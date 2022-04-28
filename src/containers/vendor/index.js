@@ -49,10 +49,22 @@ const Vendor = () => {
     setLoading(true);
     const payload = {
       id: vendor.id,
-      name: vendor.name,
-      email: vendor.email,
-      phone: vendor.phone,
     };
+
+    if (flag === 'firstdb') {
+      payload.name = vendor.name;
+    }
+    if (flag === 'seconddb') {
+      payload.email = vendor.email;
+      payload.phone = vendor.phone;
+    }
+
+    if (flag === 'globaldb') {
+      payload.name = vendor.name;
+      payload.email = vendor.email;
+      payload.phone = vendor.phone;
+    }
+
     await SERVICE_MAPPING[flag].editVendor(payload);
     await getVendors();
   };
@@ -88,6 +100,7 @@ const Vendor = () => {
             selectedStatus={selectedStatus}
             setSelectedStatus={setSelectedStatus}
             editVendor={editVendor}
+            flag={flag}
           />
           <div style={{ display: 'flex', width: '100%', gap: '30px' }}>
             <div style={{ width: '65%' }}>
