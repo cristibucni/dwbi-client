@@ -42,9 +42,9 @@ const SECOND_DB = {
   UPDATE_ORDER: '/api/OrderSecondDb/Update',
   DELETE_ORDER: '/api/OrderSecondDb/Delete',
   GET_VENDOR: '/api/VendorSecondDb/Get',
-  CREATE_VENDOR: '/api/VendorSecondDb/Create',
-  UPDATE_VENDOR: '/api/VendorSecondDb/Update',
-  DELETE_VENDOR: '/api/VendorSecondDb/Delete',
+  CREATE_VENDOR: '/api/VendorGlobalDb/Create',
+  UPDATE_VENDOR: '/api/VendorGlobalDb/Update',
+  DELETE_VENDOR: '/api/VendorGlobalDb/Delete',
 };
 const GLOBAL_DB = {
   GET_CUSTOMER: '/api/CustomerFirstDb/Get',
