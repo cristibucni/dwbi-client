@@ -87,12 +87,29 @@ export const routes = [
     icon: <Storage />,
     items: [
       {
+        href: '/globaldb/customer',
+        component: Customer,
+        name: 'Customer',
+        icon: <Person />,
+      },
+      {
         href: '/globaldb/item',
         component: Item,
         name: 'Item',
         icon: <Inventory />,
       },
-
+      {
+        href: '/globaldb/location',
+        component: Location,
+        name: 'Location',
+        icon: <LocationOn />,
+      },
+      {
+        href: '/globaldb/menu',
+        component: Menus,
+        name: 'Menu',
+        icon: <MenuBook />,
+      },
       {
         href: '/globaldb/order',
         component: Orders,
