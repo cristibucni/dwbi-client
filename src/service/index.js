@@ -43,7 +43,7 @@ const SECOND_DB = {
   DELETE_ORDER: '/api/OrderSecondDb/Delete',
   GET_VENDOR: '/api/VendorSecondDb/Get',
   CREATE_VENDOR: '/api/VendorGlobalDb/Create',
-  UPDATE_VENDOR: '/api/VendorGlobalDb/Update',
+  UPDATE_VENDOR: '/api/VendorSecondDb/Update',
   DELETE_VENDOR: '/api/VendorGlobalDb/Delete',
 };
 const GLOBAL_DB = {
