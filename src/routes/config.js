@@ -63,22 +63,10 @@ export const routes = [
     icon: <Storage />,
     items: [
       {
-        href: '/seconddb/customer',
-        component: Customer,
-        name: 'Customer',
-        icon: <Person />,
-      },
-      {
         href: '/seconddb/item',
         component: Item,
         name: 'Item',
         icon: <Inventory />,
-      },
-      {
-        href: '/seconddb/location',
-        component: Location,
-        name: 'Location',
-        icon: <LocationOn />,
       },
       {
         href: '/seconddb/menu',
