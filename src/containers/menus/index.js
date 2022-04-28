@@ -26,14 +26,15 @@ import { LoadingIndicator } from '../../components/loading-indicator';
 import { SERVICE_MAPPING } from '../../service';
 
 const Menus = () => {
+  const flag = window.location.href.split('/')[3];
   const [loading, setLoading] = useState(true);
-  const [isDelivery, setIsDelivery] = useState(false);
+  const [isDelivery, setIsDelivery] = useState(
+    flag === 'firstdb' ? true : false
+  );
   const [menus, setMenus] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [orderLoading, setOrderLoading] = useState(false);
   const [customerId, setCustomerId] = useState(0);
-
-  const flag = window.location.href.split('/')[3];
 
   useEffect(() => {
     getMenus();
@@ -260,16 +261,18 @@ const Menus = () => {
                 <div>Total</div>
                 <div> {getItemTotal()} RON</div>
               </div>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={isDelivery}
-                    onChange={(e) => setIsDelivery(e.target.checked)}
-                    name="delivery"
-                  />
-                }
-                label={`${isDelivery ? 'With' : 'Without'} delivery`}
-              />
+              {flag === 'globaldb' && (
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={isDelivery}
+                      onChange={(e) => setIsDelivery(e.target.checked)}
+                      name="delivery"
+                    />
+                  }
+                  label={`${isDelivery ? 'With' : 'Without'} delivery`}
+                />
+              )}
               {isDelivery && <TextField label="Address" variant="standard" />}
               <Button onClick={() => createNewOrder()}>Place order</Button>
             </Paper>
