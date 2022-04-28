@@ -71,7 +71,7 @@ class AbstractService {
 
   deleteCustomer = async (payload) => {
     return await axios.delete(
-      `${this.db.DEETE_CUSTOMER}?customerId=${payload.id}`
+      `${this.db.DELETE_CUSTOMER}?customerId=${payload.id}`
     );
   };
 
